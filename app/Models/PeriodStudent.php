@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class PeriodStudent extends Model
+{
+    use HasFactory;
+    protected $fillable = [
+        'student_id', 'period_id'
+    ];
+    protected $table = 'period_student';
+}

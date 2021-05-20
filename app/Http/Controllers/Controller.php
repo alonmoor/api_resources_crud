@@ -1,5 +1,5 @@
 <?php
-
+//https://cerwyn.medium.com/laravel-many-to-many-eloquent-orm-d22ecff81b72
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;

@@ -2,8 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Http\Resources\Product\ProductResource;
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Review;
+
+
+use App\Exceptions\ProductNotBelongsToUser;
+use App\Http\Requests\ProductRequest;
+use App\Http\Resources\Product\ProductCollection;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
+use App\Models\Products;
+
 
 class ProductController extends Controller
 {
@@ -14,7 +25,29 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::all();
+      // $products = Product::width(['reviews']);
+      // return ProductResource::collection($products->paginate(30))->respone();
+
+    // return new ProductCollection(Product::all());//(Product::paginate(20));
+     //  return Product::all();
+
+
+
+     return ProductResource::collection(Product::paginate(5));
+     return ProductResource::collection(Product::all());
+
+
+
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -25,14 +58,18 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'slug' => 'required',
-            'price' => 'required'
-        ]);
-
-        return Product::create($request->all());
+        $product = new Product;
+        $product->name = $request->name;
+        $product->detail = $request->description;
+        $product->stock = $request->stock;
+        $product->price = $request->price;
+        $product->discount = $request->discount;
+        $product->save();
+        return response([
+            'data' => new ProductResource($product)
+        ],Response::HTTP_CREATED);
     }
+
 
     /**
      * Display the specified resource.
@@ -42,7 +79,21 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        return Product::find($id);
+         $product = \App\Models\Product::find($id);
+      //  return $product;
+        return new ProductResource($product);
+
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
     }
 
     /**
@@ -54,9 +105,14 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $product = Product::find($id);
+        $product = \App\Models\Product::find($id);
+        $this->ProductUserCheck($product);
+        $request['detail'] = $request->description;
+        unset($request['description']);
         $product->update($request->all());
-        return $product;
+        return response([
+            'data' => new ProductResource($product)
+        ],Response::HTTP_CREATED);
     }
 
     /**
@@ -65,19 +121,18 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        return Product::destroy($id);
+        $this->ProductUserCheck($product);
+        $product->delete();
+        return response(null,Response::HTTP_NO_CONTENT);
     }
 
-     /**
-     * Search for a name
-     *
-     * @param  str  $name
-     * @return \Illuminate\Http\Response
-     */
-    public function search($name)
+    public function ProductUserCheck($product)
     {
-        return Product::where('name', 'like', '%'.$name.'%')->get();
+        if (Auth::id() !== $product->user_id) {
+            throw new ProductNotBelongsToUser;
+        }
     }
 }
+
