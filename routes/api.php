@@ -15,28 +15,17 @@ use App\Http\Controllers\PeriodStudentController;
 use App\Http\Resources\StudentsResource;
 use App\Http\Resources\StudentsCollection;
 
-
-
-// use App\Http\Resources\ReviewResource;
-// use App\Http\Resources\ReviewCollection;
-// use App\Http\Resources\Product\ProductResource;
-
-
-
-
-use App\Models\Student;
-use App\Models\Author;
-use App\Models\Product;
-use App\Models\Review;
-
-
-
+use \App\Models\Student;
 //protected routs
 Route::middleware(['auth:api'])->prefix('v1')->group(function () {
 
   Route::get('/user',function(Request $request){
     return $request->user();
   });
+
+
+  //Route::get('/students',[StudentsController::class,'index']);
+
 
   Route::get('/periods/{period}',[PeriodController::class,'show']);
   Route::get('/students/{student}',[StudentsController::class,'show']);
