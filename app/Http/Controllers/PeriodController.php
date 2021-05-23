@@ -21,13 +21,7 @@ class PeriodController extends Controller
     {
         $periods = Period::with(['students']);
         return PeriodResource::collection($periods->paginate(50))->response();
-
-        // return $periods->teachers;
-        // return PeriodResource::collection($periods->teachers);
-       // return PeriodResource::collection(Period::all());
     }
-
-
 
 //--------------------------------------------------------------------
     /**

@@ -17,13 +17,42 @@ class Student extends Model
     protected $fillable = ['username','fullname','grade','password'];
 
 
-    public function teachers(){
-        return $this->belongsToMany(Teacher::class);
-    }
+    // public function teachers(){
+    //     return $this->belongsToMany(Teacher::class);
+    // }
 
     public function periods(){
         return $this->belongsToMany(Period::class);
     }
+
+    // public function periods(){
+    //     // return $this->belongsToMany(Student::class);
+    //     return $this->hasManyThrough(
+    //       '\App\Models\Period',
+    //      '\App\Models\PeriodStudent',
+    //      'student_id',
+    //      'id',
+    //      'id',
+    //      'period_id'
+    //     );
+    //  }
+
+
+
+     public function teachers(){
+        // return $this->belongsToMany(Student::class);
+        return $this->hasManyThrough(
+          '\App\Models\teacher',
+         '\App\Models\TeacherStudent',
+         'student_id',
+         'id',
+         'id',
+         'teacher_id'
+        );
+     }
+
+
+
 
 
     /**

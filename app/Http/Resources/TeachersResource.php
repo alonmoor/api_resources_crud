@@ -15,6 +15,7 @@ class TeachersResource extends JsonResource
     public function toArray($request)
     {
 
+        $student = $this->whenLoaded('student');
         return [
             'id'=> (string)$this->id,
             'type' => 'teachers',
@@ -22,6 +23,7 @@ class TeachersResource extends JsonResource
             'attributes' => [
                  'username'=> $this->username,
                  'fullname'=> $this->fullname,
+
                  'email'=> $this->email,
                  'created_at'=> $this->created_at,
                  'updated_at'=> $this->updated_at,
@@ -30,10 +32,10 @@ class TeachersResource extends JsonResource
                  ],
             ],
             'periods' => PeriodResource::collection($this->whenLoaded('periods')),
-
+           // 'student' => new StudentsResource($this->students) ,
         ];
 
 
- 
+
     }
 }

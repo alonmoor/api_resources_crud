@@ -46,7 +46,38 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
-    ],
+
+        'user' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+
+        'student' => [
+            'driver' => 'session',
+            'provider' => 'students',
+        ],
+
+
+
+        'admin-api' => [
+            'driver' => 'passport',
+            'provider' => 'admins',
+        ],
+
+
+
+        'student-api' => [
+            'driver' => 'passport',
+            'provider' => 'students',
+        ],
+
+
+     ],
 
     /*
     |--------------------------------------------------------------------------
@@ -69,6 +100,17 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Admin::class,
+        ],
+
+        'students' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Student::class,
         ],
 
         // 'users' => [
@@ -99,6 +141,16 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+
+
+        'admins' => [
+            'provider' => 'admins',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+
     ],
 
     /*

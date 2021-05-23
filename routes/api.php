@@ -27,32 +27,45 @@ Route::middleware(['auth:api'])->prefix('v1')->group(function () {
   //Route::get('/students',[StudentsController::class,'index']);
 
 
-  Route::get('/periods/{period}',[PeriodController::class,'show']);
-  Route::get('/students/{student}',[StudentsController::class,'show']);
+
+  // Route::get('/students/{student}',[StudentsController::class,'show']);
+  // Route::get('/students',[StudentsController::class,'index']);
+
 
   //  Route::post('/periods/{period}',[PeriodController::class,'store']);
   //  Route::post('/students/{student}',[StudentsController::class,'store']);
 
-   Route::post('/periods',[PeriodController::class,'store']);
-   Route::post('/students',[StudentsController::class,'store']);
+  //  Route::post('/periods',[PeriodController::class,'store']);
+  //  Route::post('/students',[StudentsController::class,'store']);
 
+  //  Route::get('/authors/{author}', [AuthorsController::class,'show']);
+  //  Route::get('/authors', [AuthorsController::class,'index']);
+
+  Route::get('/periods/{period}',[PeriodController::class,'show']);
+   Route::apiResource('/authors', AuthorsController::class);
+   Route::apiResource('/students', StudentsController::class);
+   Route::apiResource('/teachers', TeachersController::class);
+   Route::apiResource('/periods', PeriodController::class);
+   Route::apiResource('/periodstudent', PeriodStudentController::class);
 });
+//Route::resource('/periodstudent', PeriodStudentController::class, 'store');
+//Route::post('/periods/{student}/periodstudent', [PeriodController::class, 'store']);
 
 //get:
 //http://student-api.local/api/students/1
 //http://student-api.local/api/v1/students/1
 
 
-Route::get('/json',function(){
-$student =Student::find(1);
-return new StudentsResource($student);
-});
+// Route::get('/json',function(){
+// $student =Student::find(1);
+// return new StudentsResource($student);
+// });
 
 
-Route::get('/json2',function(){
-  $students=Student::paginate(8);
-  return new StudentsCollection($students);
-  });
+// Route::get('/json2',function(){
+//   $students=Student::paginate(8);
+//   return new StudentsCollection($students);
+//   });
 
 
 
@@ -80,17 +93,17 @@ Route::get('/users', [UserController::class, 'index']);
 //public routs
 //===============Period==========================================
  Route::resource('/periods', PeriodController::class);
- Route::post('/periods/{student}/periodstudent', [PeriodController::class, 'store']);
+ //Route::post('/periods/{student}/periodstudent', [PeriodController::class, 'store']);
 
 
 //===============Teachers==========================================
 Route::resource('teachers', TeachersController::class);
 Route::get('/teachers/{period}', [TeachersController::class, 'show']);
-// Route::get('/teachers', [TeachersController::class, 'index']);
+Route::get('/teachers', [TeachersController::class, 'index']);
 
 //===============Student==========================================
 
-  Route::get('/students/{student}',[StudentsController::class,'show']);
- Route::resource('/students', StudentsController::class);
- Route::post('/students/{student}', [StudentsController::class, 'store']);
+ // Route::get('/students/{student}',[StudentsController::class,'show']);
+  Route::resource('/students', StudentsController::class);
+//  Route::post('/students/{student}', [StudentsController::class, 'store']);
 

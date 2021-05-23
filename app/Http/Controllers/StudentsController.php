@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Student;
 use App\Models\Period;
-
+use App\Models\Teacher;
 
 class StudentsController extends Controller
 {
@@ -41,7 +41,13 @@ public function listUsers(Student $student){
      */
     public function index()
     {
-        return Student::all();
+         return StudentsResource::collection(Student::all());
+         $students = Student::with(['teachers']);
+         return StudentsResource::collection($students->paginate(100))->response();
+        return StudentsResource::collection($students);
+
+        return StudentsResource::collection([Student::all(),$students ]);
+
     }
 //-------------------------------------------------------------------------
     /**
@@ -60,7 +66,7 @@ public function listUsers(Student $student){
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StudentRequest $request)
+    public function store(Request $request)
     {
         static $password;
 
@@ -73,20 +79,21 @@ public function listUsers(Student $student){
         'remember_token' => Str::random(10)
         ]);
         return new StudentsResource($student);
-
     }
 //-------------------------------------------------------------------------
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Model\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Student  $student)
     {
-
-        $student = \App\Models\Student::find($id);
         return new StudentsResource($student);
+       // $student = \App\Models\Student::find($id);
+       // return  $student->periods;
+
+
         // return response()->json([
         //     'data' =>[
         //         'id' => $id,
@@ -101,9 +108,6 @@ public function listUsers(Student $student){
 
         // $student = \App\Models\Student::find($id);
           //return $student;
-
-
-
     }
 //-------------------------------------------------------------------------
     /**
@@ -129,10 +133,12 @@ public function listUsers(Student $student){
         $student ->update([
             'username' => $request->input('username'),
             'fullname' => $request->input('fullname'),
-            'grade' => $request->input('grade')
+            'grade' => $request->input('grade'),
+            'password' => $request->input('password')
         ]);
 
         return new StudentsResource($student);
+
     }
 //-------------------------------------------------------------------------
     /**
@@ -143,6 +149,8 @@ public function listUsers(Student $student){
      */
     public function destroy($id)
     {
-        //
+        $student = \App\Models\Student::find($id);
+        $student ->delete();
+        return response(null,204);
     }
 }

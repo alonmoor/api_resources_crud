@@ -3,7 +3,10 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Http\Resources\TeachersResource;
 use \App\Models\Period;
+use \App\Models\Teacher;
 class StudentsResource extends JsonResource
 {
     /**
@@ -20,6 +23,7 @@ class StudentsResource extends JsonResource
                'attributes' => [
                     'username'=> $this->username,
                     'fullname'=> $this->fullname,
+                    'period' => $this->periods,
                     'grade'=> $this->grade,
                     'password'=> $this->password,
                     'profile' => route('students.show',$this->id),
@@ -28,10 +32,8 @@ class StudentsResource extends JsonResource
                     'href' => [
                         'periods' => route('periods.index',$this->id)
                      ],
-                        $this->periods,
                     ],
-        ];
-
+                  ];
     }
 
     // public function with($request)

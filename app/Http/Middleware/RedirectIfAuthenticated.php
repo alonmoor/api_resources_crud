@@ -1,10 +1,10 @@
 <?php
 
+
 namespace App\Http\Middleware;
 
 use App\Providers\RouteServiceProvider;
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RedirectIfAuthenticated
@@ -17,16 +17,50 @@ class RedirectIfAuthenticated
      * @param  string|null  ...$guards
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, ...$guards)
+    public function handle($request, Closure $next, $guard = null)
     {
-        $guards = empty($guards) ? [null] : $guards;
+        // if ($guard == "admin" && Auth::guard($guard)->check()) {
+        //     return redirect('/admin');
+        // }
+        // if ($guard == "blogger" && Auth::guard($guard)->check()) {
+        //     return redirect('/blogger');
+        // }
+        // if (Auth::guard($guard)->check()) {
+        //     return redirect('/home');
+        // }
 
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
-            }
-        }
+        // return $next($request);
 
-        return $next($request);
+
+
+        switch ($guard) {
+            case 'admin':
+              if (Auth::guard($guard)->check()) {
+                return redirect()->route('admin.dashboard');
+              }
+              break;
+
+
+
+              case 'student':
+                if (Auth::guard($guard)->check()) {
+                  return redirect()->route('/student');
+                }
+                break;
+
+
+
+
+            default:
+              if (Auth::guard($guard)->check()) {
+                  return redirect('/home');
+              }
+              break;
+          }
+
+          return $next($request);
+
+
     }
 }
+

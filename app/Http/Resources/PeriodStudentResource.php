@@ -21,7 +21,6 @@ class PeriodStudentResource extends JsonResource
             'student' => $this->student,
             'created_at' => (string) $this->created_at,
             'updated_at' => (string) $this->updated_at,
-            
           ];
     }
 }

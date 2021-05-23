@@ -89,9 +89,16 @@ class TeachersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TeacherRequest $request, Teacher $teacher )
     {
-        //
+        $teacher ->update([
+            'username' => $request->input('username'),
+            'fullname' => $request->input('fullname'),
+            'email' => $request->input('email'),
+            'password' => $request->input('password')
+        ]);
+
+        return new TeachersResource($teacher);
     }
 //--------------------------------------------------------------------
     /**
@@ -102,6 +109,8 @@ class TeachersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $teacher = \App\Models\Teacher::find($id);
+        $teacher ->delete();
+        return response(null,204);
     }
 }

@@ -10,6 +10,9 @@ use \App\Models\Student;
 
 class PeriodStudentController extends Controller
 {
+
+
+//-----------------------------------------------------------------
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +25,7 @@ class PeriodStudentController extends Controller
             return response()->json(['message'=>null,'data'=>$students],200);
 
     }
-
+//-----------------------------------------------------------------
     /**
      * Show the form for creating a new resource.
      *
@@ -32,7 +35,7 @@ class PeriodStudentController extends Controller
     {
         //
     }
-
+//-----------------------------------------------------------------
     /**
      * Store a newly created resource in storage.
      *
@@ -41,16 +44,39 @@ class PeriodStudentController extends Controller
      */
     public function store(Request $request, Student $student , Period $period )
     {
-        $student = Period::firstOrCreate(
-            [
-              'student_id' => $request->student()->id,
-              'period_id' => $period->id,
-            ],
 
-          );
-          return new PeriodStudentResource($student);
+        $periods[] = $request->input('periods');
+
+        static $password;
+
+        $faker = \Faker\Factory::create(1);
+        $student = Student::create([
+        'username' => $faker->name,
+        'fullname' => $faker->word,
+        'grade' => $faker->numberBetween(1,12),
+        'password' => $password ?: $password = bcrypt('secret')
+        ]);
+
+
+    //    $student->periods()->attach($periods);
+
+     $student->periods()->attach($request->input('period_id'));
+
+       // $student = Student::find($request->input('student_id'));
+
+
+        // $student = Period::firstOrCreate(
+        //     [
+        //       'student_id' => $request->student()->id,
+        //       'period_id' => $period->id,
+        //     ],
+
+        //   );
+        //  return new PeriodStudentResource($student);
+
+
     }
-
+//-----------------------------------------------------------------
     /**
      * Display the specified resource.
      *
@@ -61,7 +87,7 @@ class PeriodStudentController extends Controller
     {
         //
     }
-
+//-----------------------------------------------------------------
     /**
      * Show the form for editing the specified resource.
      *
@@ -72,7 +98,7 @@ class PeriodStudentController extends Controller
     {
         //
     }
-
+//-----------------------------------------------------------------
     /**
      * Update the specified resource in storage.
      *
@@ -84,7 +110,7 @@ class PeriodStudentController extends Controller
     {
         //
     }
-
+//-----------------------------------------------------------------
     /**
      * Remove the specified resource from storage.
      *

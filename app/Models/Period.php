@@ -19,6 +19,11 @@ class Period extends Model
       return $this->belongsTo(Teacher::class,'teacher_id');
     }
 
+
+  //   public function students(){
+  //     return $this->belongsToMany(Student::class);
+  // }
+
     public function students(){
        // return $this->belongsToMany(Student::class);
        return $this->hasManyThrough(
@@ -30,5 +35,11 @@ class Period extends Model
         'student_id'
        );
     }
+
+    protected $hidden =  [
+            'laravel_through_key',
+            'created_at' ,
+            'updated_at'
+    ];
 }
 
